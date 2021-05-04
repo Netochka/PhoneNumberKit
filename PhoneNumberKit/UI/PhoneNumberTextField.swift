@@ -140,7 +140,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         }
     }
 
-    public lazy var partialFormatter: PartialFormatter = PartialFormatter(
+    public private(set) lazy var partialFormatter: PartialFormatter = PartialFormatter(
         phoneNumberKit: phoneNumberKit,
         defaultRegion: defaultRegion,
         withPrefix: withPrefix
@@ -271,6 +271,13 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     func internationalPrefix(for countryCode: String) -> String? {
         guard let countryCode = phoneNumberKit.countryCode(for: currentRegion)?.description else { return nil }
         return "+" + countryCode
+    }
+  
+    open func updatePartialFormatter() {
+        partialFormatter = PartialFormatter(
+          phoneNumberKit: PhoneNumberKit(),
+          defaultRegion: PhoneNumberKit.defaultRegionCode(),
+          withPrefix: withPrefix)
     }
 
     open func updateFlag() {
